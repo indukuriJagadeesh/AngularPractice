@@ -1,0 +1,28 @@
+
+
+
+    <!--The content below is only a placeholder and can be replaced.-->
+    <br/><br/><br/>
+<h2>Here you need to upload any file : </h2>
+
+<!--
+<input type="file" name="photo" ng2FileSelect [uploader]="uploader" />
+
+<button type="button" class="btn btn-success btn-s" 
+  (click)="uploader.uploadAll()" 
+  [disabled]="!uploader.getNotUploadedItems().length" >
+      Upload an Image
+</button>
+-->
+
+Version = {{version.full}} <br/>
+    <input type="file" onclick="this.value = null" (change)="upload($event.target.files)" multiple="multiple" />
+
+    <input type="button" value="upload" (click)="upload($event.target.files)" />
+    Upload Percent: {{percentDone}}% <br />
+    
+    <ng-container *ngIf="uploadSuccess">
+      Upload Successful
+    </ng-container> 
+
+    <!--<input type='file' (change)="onSelectFile($event)" multiple>-->
