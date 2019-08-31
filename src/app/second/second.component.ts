@@ -3,6 +3,7 @@ import {  FileUploader, FileSelectDirective } from 'ng2-file-upload/ng2-file-upl
 import {HttpClientModule, HttpClient, HttpRequest, HttpResponse, HttpEventType} from '@angular/common/http';
 
 const uploadURL = 'http://localhost:8080/uploadFile';
+const uploadURLForMultiple = 'http://localhost:8080/uploadMultipleFiles';
 @Component({
   selector: 'app-second',
   templateUrl: './second.component.html',
@@ -25,7 +26,8 @@ export class SecondComponent implements OnInit {
 
   upload(files: File[]){
     //pick from one of the 4 styles of file uploads below
-    this.uploadAndProgress(files);
+    //this.uploadAndProgress(files);
+    this.uploadAndProgressForMultiple(files);
   }
 
   urls = [];
@@ -43,6 +45,21 @@ export class SecondComponent implements OnInit {
                 reader.readAsDataURL(event.target.files[i]);
         }
     }
+  }
+
+  uploadAndProgressForMultiple(files: File[]){
+    console.log('calling>>'+files)
+    var formData = new FormData();
+    Array.from(files).forEach(f => formData.append('files',f))
+    
+    this.http.post(uploadURLForMultiple, formData, {reportProgress: true, observe: 'events'})
+      .subscribe(event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          this.percentDone = Math.round(100 * event.loaded / event.total);
+        } else if (event instanceof HttpResponse) {
+          this.uploadSuccess = true;
+        }
+    });
   }
 
   uploadAndProgress(files: File[]){
